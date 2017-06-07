@@ -1,0 +1,46 @@
+set encoding=utf-8
+scriptencoding utf-8
+
+set fileencoding=utf-8
+
+set number
+set relativenumber
+
+set wrap!
+set display=lastline
+
+set autoindent
+set tabstop=4
+set expandtab
+set shiftwidth=4
+
+set nobackup
+set noswapfile
+
+set ignorecase
+set smartcase
+
+set nrformats=
+
+set foldmethod=marker
+
+set cursorline
+
+set textwidth=0
+
+set visualbell
+set t_vb=
+
+set mouse=n
+
+colorscheme torte
+
+syntax on
+
+nnoremap // :noh<CR>
+nnoremap <Space>w :<C-u>update<CR>
+nnoremap <Space>q :<C-u>quit<CR>
+nnoremap <Space>Q :<C-u>quit!<CR>
+nnoremap <Space>4 <S-$>
+nnoremap <Space>; :
+
