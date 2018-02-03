@@ -6,7 +6,7 @@ set fileencoding=utf-8
 set number
 set relativenumber
 
-set wrap!
+set nowrap
 set display=lastline
 
 set autoindent
