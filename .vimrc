@@ -37,7 +37,9 @@ set iminsert=0
 set imsearch=0
 
 " packages
-packadd matchit
+if has('packages')
+   packadd matchit
+endif
 
 " colorscheme and syntax
 colorscheme ron
@@ -68,15 +70,33 @@ nmap <silent> ,j :call execute(join(['winpos', getwinposx(),      getwinposy() +
 nmap <silent> ,k :call execute(join(['winpos', getwinposx(),      getwinposy() - 10]))<cr>,
 nmap <silent> ,l :call execute(join(['winpos', getwinposx() + 10, getwinposy()     ]))<cr>,
 
-" imitate completechar
-let g:completechars = []
-for completechar in split('!@#$%^&*()-_=+\|~?`', '\zs')
-   call add(g:completechars, { 'word' : completechar })
-endfor
-unlet completechar
-inoremap <silent> ,, <c-r>=CompleteChar()<cr>
-function! CompleteChar()
-   call complete(col(','), g:completechars)
+" imitate completion
+"let s:completechars = map(split('!@#$%^&*()-_=+\|~?`', '\zs'), {idx, val -> { 'word': val } })
+let s:completechars = map(split('!@#$%^&*()-_=+\|~?`', '\zs'), '{ "word": v:val }')
+call add(s:completechars, { 'word': '	', 'abbr': '[htab]' }) " horizontal-tab
+call add(s:completechars, { 'word': '', 'abbr': '[vtab]' }) " vertical-tab
+inoremap <silent> ,, <c-r>=<sid>complete_char()<cr>
+function! s:complete_char()
+   call complete(col('.'), s:completechars)
+   return ''
+endfunction
+inoremap <silent> ,d <c-r>=<sid>complete_date()<cr>
+function! s:complete_date()
+   let localtime = localtime()
+   call complete(col('.'), [
+            \ strftime('%Y-%m-%d', localtime),
+            \ strftime('%Y%m%d', localtime),
+            \ strftime('%Y/%m/%d', localtime)
+            \ ])
+   return ''
+endfunction
+inoremap <silent> ,t <c-r>=<sid>complete_time()<cr>
+function! s:complete_time()
+   let localtime = localtime()
+   call complete(col('.'), [
+            \ strftime('%H:%M', localtime),
+            \ strftime('%H%M', localtime)
+            \ ])
    return ''
 endfunction
 inoremap <silent> ,u _
@@ -85,12 +105,19 @@ inoremap <silent> ,m -
 inoremap <silent> ,e =
 inoremap <silent> ,b \
 
-" imitate fixregister
-augroup fixregister
-   autocmd!
-   autocmd BufEnter * :let @p = expand('%:p')
-   autocmd BufEnter * :let @e = expand('%:e')
-augroup END
+" imitate chilimarker
+nnoremap <nowait><silent> <space>c :<c-u>call <sid>chilimarker()<cr>
+nnoremap <nowait><silent> <space><space>c :set colorcolumn&<cr>
+function! s:chilimarker()
+   let list = split(&colorcolumn, ',')
+   let col = col('.') + s:offset . ''
+   if count(list, col)
+      call remove(list, index(list, col))
+   else
+      call add(list, col)
+   endif
+   let &l:colorcolumn = join(list, ',')
+endfunction
 
 
 " vim: set ts=3 sts=3 sw=3 et :
