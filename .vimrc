@@ -46,17 +46,16 @@ colorscheme ron
 syntax on
 
 " mapping
+let mapleader = "\<space>"
+nnoremap <leader>w :<c-u>update<cr>
+nnoremap <leader><leader>w :<c-u>write!<cr>
+nnoremap <leader>q :<c-u>quit<cr>
+nnoremap <leader><leader>q :<c-u>quit!<cr>
+nnoremap <leader><leader><leader>q :<c-u>quitall!<cr>
+nnoremap <leader>4 <s-$>
+nnoremap <leader>5 <s-%>
+nnoremap <leader>; :
 nnoremap <silent> // :<c-u>let v:hlsearch = !v:hlsearch<cr>
-nnoremap <space>w :<c-u>update<cr>
-nnoremap <space><space>w :<c-u>write!<cr>
-nnoremap <space>q :<c-u>quit<cr>
-nnoremap <space><space>q :<c-u>quit!<cr>
-nnoremap <space><space><space>q :<c-u>quitall!<cr>
-nnoremap <space>4 <s-$>
-nnoremap <space>5 <s-%>
-nnoremap <space>; :
-nnoremap / /\v
-nnoremap ? ?\v
 nnoremap <silent> * :let [@/, v:hlsearch] = [printf('\<%s\>', expand('<cword>')), v:true]<cr>
 nnoremap <silent> # :let [@/, v:hlsearch] = [printf('\<%s\>', expand('<cword>')), v:true]<cr>
 nnoremap <silent> g* :let [@/, v:hlsearch] = [expand('<cword>'), v:true]<cr>
@@ -110,7 +109,7 @@ nnoremap <nowait><silent> <space>c :<c-u>call <sid>chilimarker()<cr>
 nnoremap <nowait><silent> <space><space>c :set colorcolumn&<cr>
 function! s:chilimarker()
    let list = split(&colorcolumn, ',')
-   let col = col('.') + s:offset . ''
+   let col = col('.') . ''
    if count(list, col)
       call remove(list, index(list, col))
    else
