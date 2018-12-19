@@ -118,5 +118,37 @@ function! s:chilimarker()
    let &l:colorcolumn = join(list, ',')
 endfunction
 
+" imitate visualplus
+xnoremap zz :VScrollMiddle<cr>
+command! -range VScrollMiddle :call <sid>V_zz(<line1>, <line2>, <count>)
+function! s:V_zz(line1, line2, count)
+   let mid = (a:line2 - a:line1 + 1) / 2
+   call execute(a:line2 - mid)
+   normal! zz
+   normal! gv
+endfunction
+xnoremap zf :VMakeFoldMarker<cr>
+command! -range VMakeFoldMarker :call <sid>V_zf(<line1>, <line2>, <count>)
+function! s:V_zf(line1, line2, count)
+   if &foldmethod == 'manual'
+      setlocal foldenable
+      normal! gvzf
+   elseif &foldmethod == 'marker'
+      setlocal foldenable
+      let fm = split(&foldmarker, ',')
+      call append(a:line2    , printf(&commentstring, fm[1]))
+      call append(a:line1 - 1, printf(&commentstring, fm[0]))
+      normal! '<km<
+      normal! '>jm>
+      normal! gv=
+   endif
+endfunction
+vnoremap <silent> < :<c-u>call <sid>V_sl('<')<cr>
+vnoremap <silent> > :<c-u>call <sid>V_sl('>')<cr>
+function! s:V_sl(ward)
+   execute 'normal!' 'gv' . v:count1 . a:ward
+   normal! gv
+endfunction
+
 
 " vim: set ts=3 sts=3 sw=3 et :
