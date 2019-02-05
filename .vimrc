@@ -20,6 +20,7 @@ set ignorecase
 set smartcase
 set infercase
 set nrformats=
+set formatoptions=roqnMj
 set foldmethod=marker
 set cursorline
 set nocursorcolumn
@@ -42,7 +43,7 @@ if has('packages')
 endif
 
 " colorscheme and syntax
-colorscheme ron
+colorscheme desert
 syntax on
 
 " mapping
@@ -56,6 +57,7 @@ nnoremap <leader>4 <s-$>
 nnoremap <leader>5 <s-%>
 nnoremap <leader>; :
 nnoremap <silent> // :<c-u>let v:hlsearch = !v:hlsearch<cr>
+nnoremap <silent> ?? //
 nnoremap <silent> * :let [@/, v:hlsearch] = [printf('\<%s\>', expand('<cword>')), v:true]<cr>
 nnoremap <silent> # :let [@/, v:hlsearch] = [printf('\<%s\>', expand('<cword>')), v:true]<cr>
 nnoremap <silent> g* :let [@/, v:hlsearch] = [expand('<cword>'), v:true]<cr>
@@ -106,9 +108,9 @@ inoremap <silent> ,b \
 
 " imitate chilimarker
 nnoremap <nowait><silent> <space>c :<c-u>call <sid>chilimarker()<cr>
-nnoremap <nowait><silent> <space><space>c :set colorcolumn&<cr>
+nnoremap <nowait><silent> <space><space>c :let &l:colorcolumn=<cr>
 function! s:chilimarker()
-   let list = split(&colorcolumn, ',')
+   let list = split(&l:colorcolumn, ',')
    let col = col('.') . ''
    if count(list, col)
       call remove(list, index(list, col))
