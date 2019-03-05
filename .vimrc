@@ -16,6 +16,7 @@ set shiftwidth=4
 set nobackup
 set noswapfile
 set noundofile
+set viminfo=
 set ignorecase
 set smartcase
 set infercase
